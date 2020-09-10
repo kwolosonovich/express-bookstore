@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "jsonschema": "^1.2.6",
     "locus": "^2.0.1",
