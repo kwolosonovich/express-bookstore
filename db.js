@@ -1,14 +1,25 @@
 /** Database config for database. */
 
 
+// const { Client } = require("pg");
+// const {DB_URI} = require("./config");
+
+// let db = new Client({
+//   connectionString: DB_URI
+// });
+
+// db.connect();
+
+
+// module.exports = db;
+
+
+
 const { Client } = require("pg");
-const {DB_URI} = require("./config");
+const { data } = require("./config");
 
-let db = new Client({
-  connectionString: DB_URI
-});
+const client = new Client(data);
 
-db.connect();
+client.connect();
 
-
-module.exports = db;
+module.exports = client;
