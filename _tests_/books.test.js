@@ -5,9 +5,6 @@ const { response } = require("../app");
 const app = require("../app");
 const db = require("../db");
 
-
-// let test_book;
-
     
 // clear test database before each test
 beforeEach(async () => {
@@ -25,7 +22,6 @@ beforeEach(async () => {
                 2018
             )`
     )
-
 })
 
 describe("GET /books", () => {
@@ -47,7 +43,6 @@ describe("GET /books/:id", () => {
     })
     test("test invalid id", async () => {
         let result = await request(app).get("/books/123")
-// ******* why is this not 400 *******
         expect(result.statusCode).toEqual(404)
     })
 })
@@ -69,12 +64,25 @@ describe("POST /books", () => {
         expect(result.body).toHaveProperty("book");
         expect(result.body.book).toHaveProperty("author");
     })
-    test("add invalid type", async () => {
+    test("add invalid input type", async () => {
         let result = await request(app).post("/").send(
             "not a book"
         )
         expect(result.statusCode).toEqual(404);
     })
+    test("invalid JSON", async () => {
+      let result = await request(app).post("/books").send({
+        isbn: "string",
+        amazon_url: 1,
+        author: 1,
+        language: 1,
+        pages: "string",
+        publisher: 1,
+        title: 1,
+        year: "string",
+      });
+      expect(result.statusCode).toEqual(500);
+    });
 })
 
 describe("PUT /books/:id", () => {
@@ -104,9 +112,21 @@ describe("PUT /books/:id", () => {
         });
         expect(result.statusCode).toEqual(404);
     })
-    test("put invalid input", async () => {
+    test("put invalid input type", async () => {
       let result = await request(app).put("/books/123").send("invalid type");
       expect(result.statusCode).toEqual(404);
+    });
+    test("invalid JSON", async () => {
+        let result = await request(app).put("/books/1593279507").send({
+          amazon_url: 1,
+          author: 1,
+          language: 1,
+          pages: "string",
+          publisher: "No Starch Press",
+          title: "Eloquent JavaScript, 4th Edition",
+          year: 2020,
+        });
+        expect(result.statusCode).toEqual(500);
     });
 })
 
