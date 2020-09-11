@@ -1,7 +1,7 @@
 const express = require("express");
 const Book = require("../models/book");
-
 const router = new express.Router();
+const ExpressError = require("../expressError");
 
 
 /** GET / => {books: [book, ...]}  */
@@ -20,9 +20,12 @@ router.get("/", async function (req, res, next) {
 router.get("/:id", async function (req, res, next) {
   try {
     const book = await Book.findOne(req.params.id);
+    if (!book) { 
+      throw new ExpressError("Book Not Found", 400) 
+    };
     return res.json({ book });
   } catch (err) {
-    return next(err);
+    return next(err)
   }
 });
 
